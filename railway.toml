@@ -1,0 +1,12 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+startCommand = "zeroclaw gateway"
+restartPolicyType = "on_failure"
+
+[env]
+# Railway natively provides a PORT environment variable.
+# Since we removed the hardcoded ZEROCLAW_GATEWAY_PORT from the Dockerfile,
+# ZeroClaw will correctly read the PORT from Railway and bind the gateway to it.

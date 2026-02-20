@@ -10,3 +10,12 @@ default_temperature = 0.7
 port = 3000
 host = "[::]"
 allow_public_bind = true
+
+[web_search]
+provider = "google"
+# google_api_key = "..."
+# google_cse_id = "..."
+
+[browser]
+enabled = true
+backend = "auto"

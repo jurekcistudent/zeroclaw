@@ -891,6 +891,12 @@ pub struct WebSearchConfig {
     /// Brave Search API key (required if provider is "brave")
     #[serde(default)]
     pub brave_api_key: Option<String>,
+    /// Google Custom Search API key (required if provider is "google")
+    #[serde(default)]
+    pub google_api_key: Option<String>,
+    /// Google Custom Search Engine ID (required if provider is "google")
+    #[serde(default)]
+    pub google_cse_id: Option<String>,
     /// Maximum results per search (1-10)
     #[serde(default = "default_web_search_max_results")]
     pub max_results: usize,
@@ -917,6 +923,8 @@ impl Default for WebSearchConfig {
             enabled: true,
             provider: default_web_search_provider(),
             brave_api_key: None,
+            google_api_key: None,
+            google_cse_id: None,
             max_results: default_web_search_max_results(),
             timeout_secs: default_web_search_timeout_secs(),
         }

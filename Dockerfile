@@ -6,10 +6,10 @@ FROM rust:1.93-slim@sha256:9663b80a1621253d30b146454f903de48f0af925c967be48c8474
 WORKDIR /app
 
 # Install build dependencies
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,id=apt-lib,target=/var/lib/apt,sharing=locked \
     apt-get update && apt-get install -y \
-        pkg-config \
+    pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
 # 1. Copy manifests and toolchain pin to cache dependencies with the same compiler
@@ -53,6 +53,13 @@ default_temperature = 0.7
 port = 3000
 host = "[::]"
 allow_public_bind = true
+
+[web_search]
+provider = "google"
+
+[browser]
+enabled = true
+backend = "auto"
 EOF
 
 # ── Stage 2: Development Runtime (Debian) ────────────────────
@@ -78,7 +85,7 @@ ENV HOME=/zeroclaw-data
 # Defaults for local dev (Ollama) - matches config.template.toml
 ENV PROVIDER="ollama"
 ENV ZEROCLAW_MODEL="llama3.2"
-ENV ZEROCLAW_GATEWAY_PORT=3000
+# ENV ZEROCLAW_GATEWAY_PORT=3000 (Removed to allow fallback to PORT env var or config.toml)
 
 # Note: API_KEY is intentionally NOT set here to avoid confusion.
 # It is set in config.toml as the Ollama URL.
@@ -101,7 +108,7 @@ ENV HOME=/zeroclaw-data
 # Default provider (model is set in config.toml, not here,
 # so config file edits are not silently overridden)
 ENV PROVIDER="openrouter"
-ENV ZEROCLAW_GATEWAY_PORT=3000
+# ENV ZEROCLAW_GATEWAY_PORT=3000 (Removed to allow fallback to PORT env var or config.toml)
 
 # API_KEY must be provided at runtime!
 
